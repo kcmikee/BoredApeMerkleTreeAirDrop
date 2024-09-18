@@ -8,7 +8,7 @@ import hre, { ethers } from "hardhat";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 const helpers = require("@nomicfoundation/hardhat-network-helpers");
 
-describe("Multisig", function () {
+describe("BoredApeAirdrop", function () {
   async function deployToken() {
     // Contracts are deployed using the first signer/account by default
     const Token = await ethers.getContractFactory("Web3CXI");
@@ -31,6 +31,8 @@ describe("Multisig", function () {
 
     const merkleTree = StandardMerkleTree.of(whiteList, ["address", "uint256"]);
     const merkleRoot = merkleTree.root;
+
+    console.log("merRook::::", merkleRoot);
 
     const MerkleAirdrop = await ethers.getContractFactory("MerkleAirdrop");
     const merkleAD = await MerkleAirdrop.deploy(token, merkleRoot);
@@ -78,7 +80,7 @@ describe("Multisig", function () {
         to: addr1,
       });
 
-      const leaf = [await addr1Signer.getAddress(), amount];
+      const leaf = [addr1Signer.address, amount];
       const proof = merkleTree.getProof(leaf);
 
       console.log("Merkle Root:", merkleRoot);

@@ -28,7 +28,9 @@ contract MerkleAirdrop is Ownable {
             "Must own a BAYC NFT"
         );
 
-        bytes32 leaf = keccak256(abi.encodePacked(msg.sender, amount));
+        bytes32 leaf = keccak256(
+            bytes.concat(keccak256(abi.encode(msg.sender, amount)))
+        );
         require(
             MerkleProof.verify(merkleProof, merkleRoot, leaf),
             "Invalid proof"
